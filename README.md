@@ -1,4 +1,4 @@
-# SwachhScore
+
 
 # SwachhScore  
 **Developed and Managed by Smart Artificial Intelligence (SAI)**  
