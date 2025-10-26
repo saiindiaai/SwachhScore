@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAI App Launcher</title>
+  <style>
+    body {
+      background-color: #0f172a;
+      color: #e2e8f0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    h1 {
+      margin-bottom: 40px;
+      font-size: 2rem;
+      text-align: center;
+    }
+
+    .btn {
+      background-color: #2563eb;
+      color: white;
+      padding: 15px 30px;
+      margin: 10px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #1d4ed8;
+      transform: scale(1.05);
+    }
+
+    iframe {
+      width: 100vw;
+      height: 100vh;
+      border: none;
+      display: none;
+    }
+
+    #backBtn {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      background-color: #1e293b;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      display: none;
+      cursor: pointer;
+      z-index: 9999;
+    }
+
+    #notice {
+      display: none;
+      text-align: center;
+      color: #cbd5e1;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <h1>Choose an App to Open</h1>
+  <button class="btn" onclick="showNotice(1)">Open App 1</button>
+  <button class="btn" onclick="showNotice(2)">Open App 2</button>
+
+  <div id="notice">
+    <h2>⚙️ Powered by <strong>Smart Artificial Intelligence</strong></h2>
+    <p>© 2025 Smart Artificial Intelligence. All rights reserved.</p>
+    <p>For technical support, contact <strong>sai.india.ai@zohomail.in</strong></p>
+    <p style="margin-top:20px;">Opening your app...</p>
+  </div>
+
+  <button id="backBtn" onclick="goBack()">← Back</button>
+  <iframe id="appFrame"></iframe>
+
+  <script>
+    // Base64 encoded URLs (hidden)
+    const appData = {
+      1: "aHR0cHM6Ly9yZS1jeWNsZS1jb3B5LTg2ODE4MGU1LmJhc2U0NC5hcHAv",
+      2: "aHR0cHM6Ly9zd2FjaGgtc2NvcmUtN2JlNDdkZjEuYmFzZTQ0LmFwcC8="
+    };
+
+    // Decode Base64 safely
+    function decodeLink(encoded) {
+      return atob(encoded);
+    }
+
+    function showNotice(num) {
+      // Hide menu and show notice
+      document.querySelector('h1').style.display = 'none';
+      document.querySelectorAll('.btn').forEach(btn => btn.style.display = 'none');
+      const notice = document.getElementById('notice');
+      notice.style.display = 'block';
+
+      // After 2 seconds, open the app
+      setTimeout(() => openApp(num), 2000);
+    }
+
+    function openApp(num) {
+      const iframe = document.getElementById('appFrame');
+      document.getElementById('notice').style.display = 'none';
+      iframe.src = decodeLink(appData[num]);
+      iframe.style.display = 'block';
+      document.getElementById('backBtn').style.display = 'block';
+    }
+
+    function goBack() {
+      const iframe = document.getElementById('appFrame');
+      iframe.style.display = 'none';
+      iframe.src = "";
+      document.querySelector('h1').style.display = 'block';
+      document.querySelectorAll('.btn').forEach(btn => btn.style.display = 'inline-block');
+      document.getElementById('backBtn').style.display = 'none';
+    }
+
+    // Disable right-click
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    // Disable F12, Ctrl+Shift+I, Ctrl+U, etc.
+    document.onkeydown = function(e) {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && ["I", "C", "J"].includes(e.key)) ||
+        (e.ctrlKey && e.key === "U")
+      ) {
+        e.preventDefault();
+        return false;
+      }
+    };
+
+    // Detect DevTools open
+    (function devtoolsDetector() {
+      const threshold = 160;
+      setInterval(() => {
+        const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+        const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+        if (widthThreshold || heightThreshold) {
+          document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:40vh;'>Unauthorized Inspection Blocked 🔒</h1>";
+        }
+      }, 1000);
+    })();
+  </script>
+</body>
+</html>
