@@ -12,14 +12,14 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
+      justify-content: flex-start;
+      min-height: 100vh;
       margin: 0;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     h1 {
-      margin-bottom: 40px;
+      margin: 40px 0 20px;
       font-size: 2rem;
       text-align: center;
     }
@@ -51,11 +51,11 @@
     #backBtn {
       position: fixed;
       top: 15px;
-      left: 15px;
+      right: 15px;
       background-color: #1e293b;
       color: white;
       border: none;
-      border-radius: 10px;
+      border-radius: 50px;
       padding: 10px 20px;
       font-size: 1rem;
       display: none;
@@ -68,6 +68,32 @@
       text-align: center;
       color: #cbd5e1;
       animation: fadeIn 1s ease-in-out;
+    }
+
+    #readme-box {
+      background-color: #1e293b;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 40px 10px;
+      max-width: 90%;
+      width: 700px;
+      max-height: 350px;
+      overflow-y: auto;
+      color: #cbd5e1;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    #readme-box h2 {
+      text-align: center;
+      margin-bottom: 10px;
+      color: #93c5fd;
+    }
+
+    footer {
+      margin: 20px 0;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 14px;
     }
 
     @keyframes fadeIn {
@@ -88,29 +114,45 @@
     <p style="margin-top:20px;">Opening your app...</p>
   </div>
 
+  <div id="readme-box">
+    <h2>📘 About SwachhScore</h2>
+    <p><strong>SwachhScore</strong> is an AI-driven cleanliness and waste management evaluation platform created by <strong>Smart Artificial Intelligence (SAI)</strong>.</p>
+    <p>It provides institutions, municipalities, and organizations with a smart, data-powered way to assess, improve, and maintain environmental hygiene standards.</p>
+    <ul>
+      <li>AI-Based Scoring and Analytics</li>
+      <li>Dynamic Dashboards for Cleanliness Tracking</li>
+      <li>Community Reporting for Verified Users</li>
+      <li>Data-driven insights for better civic management</li>
+    </ul>
+    <p><strong>Ownership Notice:</strong><br>
+    All assets, systems, and data models are the exclusive property of Smart Artificial Intelligence (SAI). Unauthorized use, reproduction, or redistribution is strictly prohibited.</p>
+  </div>
+
+  <footer>
+    © 2025 Smart Artificial Intelligence. All Rights Reserved. <br>
+    Contact: sai.india.ai@zohomail.in
+  </footer>
+
   <button id="backBtn" onclick="goBack()">← Back</button>
   <iframe id="appFrame"></iframe>
 
   <script>
-    // Base64 encoded URLs (hidden)
+    // Base64 encoded URLs
     const appData = {
       1: "aHR0cHM6Ly9yZS1jeWNsZS1jb3B5LTg2ODE4MGU1LmJhc2U0NC5hcHAv",
       2: "aHR0cHM6Ly9zd2FjaGgtc2NvcmUtN2JlNDdkZjEuYmFzZTQ0LmFwcC8="
     };
 
-    // Decode Base64 safely
     function decodeLink(encoded) {
       return atob(encoded);
     }
 
     function showNotice(num) {
-      // Hide menu and show notice
       document.querySelector('h1').style.display = 'none';
       document.querySelectorAll('.btn').forEach(btn => btn.style.display = 'none');
+      document.getElementById('readme-box').style.display = 'none';
       const notice = document.getElementById('notice');
       notice.style.display = 'block';
-
-      // After 2 seconds, open the app
       setTimeout(() => openApp(num), 2000);
     }
 
@@ -128,14 +170,15 @@
       iframe.src = "";
       document.querySelector('h1').style.display = 'block';
       document.querySelectorAll('.btn').forEach(btn => btn.style.display = 'inline-block');
+      document.getElementById('readme-box').style.display = 'block';
       document.getElementById('backBtn').style.display = 'none';
     }
 
     // Disable right-click
-    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.addEventListener('contextmenu', e => e.preventDefault());
 
-    // Disable F12, Ctrl+Shift+I, Ctrl+U, etc.
-    document.onkeydown = function(e) {
+    // Disable DevTools shortcuts
+    document.onkeydown = e => {
       if (
         e.key === "F12" ||
         (e.ctrlKey && e.shiftKey && ["I", "C", "J"].includes(e.key)) ||
@@ -146,13 +189,13 @@
       }
     };
 
-    // Detect DevTools open
+    // Detect DevTools
     (function devtoolsDetector() {
       const threshold = 160;
       setInterval(() => {
-        const widthThreshold = window.outerWidth - window.innerWidth > threshold;
-        const heightThreshold = window.outerHeight - window.innerHeight > threshold;
-        if (widthThreshold || heightThreshold) {
+        const w = window.outerWidth - window.innerWidth > threshold;
+        const h = window.outerHeight - window.innerHeight > threshold;
+        if (w || h) {
           document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:40vh;'>Unauthorized Inspection Blocked 🔒</h1>";
         }
       }, 1000);
